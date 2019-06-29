@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <elf.h>
 
-#include "loader-crt.h"
-
+#include "crt.h"
 #include "dso.h"
 #include "loader.h"
 #include "dynlink.h"
@@ -27,7 +26,7 @@ int main(int argc, char ** argv, char ** envp) {
 
     dso_t * dso = NULL;
     char * name = NULL;
-    if (_is_loader) {
+    if (__is_loader) {
         Elf64_Phdr * phdr = NULL;
         size_t phdr_length = 0;
         void * entry = NULL;

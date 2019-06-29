@@ -10,8 +10,7 @@
 #include <fcntl.h>
 #include <elf.h>
 
-#include "loader-crt.h"
-
+#include "crt.h"
 #include "elf.h"
 #include "dso.h"
 #include "debug.h"
@@ -258,7 +257,7 @@ dso_t * dso_load_self() {
         goto path_fail;
     }
 
-    dso->base = _loader_base;
+    dso->base = __loader_base;
     dso->path = path;
     dso->phdr = NULL;
     dso->phdr_length = 0;

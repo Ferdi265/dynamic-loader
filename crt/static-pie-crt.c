@@ -76,7 +76,7 @@ void _start_c(size_t * sp) {
         *target = (size_t)base + rela[i].r_addend;
     }
 
-    _is_loader = dyn_loader;
-    _loader_base = base;
+    __is_loader = dyn_loader;
+    __loader_base = base;
     __libc_start_main(main, argc, argv, _init, _fini, NULL, NULL);
 }
