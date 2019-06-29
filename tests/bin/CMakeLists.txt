@@ -1,3 +1,5 @@
+link_libraries(common)
+
 add_executable(hello hello.c)
 
 add_executable(helloshared helloshared.c)
