@@ -8,7 +8,7 @@
 #include "ld_malloc.h"
 
 static char * base_paths[] = {
-    "/home/yrlf/Programming/c/loader-test/shared"
+    "/home/yrlf/Programming/c/cmake-loader/build/tests/shared"
 };
 
 libpath_context_t base_search_path = {

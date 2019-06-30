@@ -59,7 +59,11 @@ void dso_ref(dso_t * dso) {
 }
 
 void dso_unref(dso_t * dso) {
-    if (dso->refcount == 1) dso_unlink(dso);
+    if (dso->refcount == 1) {
+        dso_unlink(dso);
+    } else {
+        dso->refcount--;
+    }
 }
 
 dso_t * dso_find(char * name) {
