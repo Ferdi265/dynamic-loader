@@ -15,7 +15,7 @@ void _start() {
         "xor %%rbp, %%rbp\n\t"
         "mov %%rsp, %%rdi\n\t"
         "andq $-16, %%rsp\n\t"
-        "jmp _start_c\n\t"
+        "call _start_c\n\t"
         :::
     );
 }
