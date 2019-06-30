@@ -112,6 +112,10 @@ bool elf_verify_dynamic(Elf64_Phdr * phdr, size_t phdrs, char * base) {
         return false;
     }
 
+    return dyn_verify_dynamic(dynamic, base);
+}
+
+bool dyn_verify_dynamic(Elf64_Dyn * dynamic, char * base) {
     Elf64_Sym * symtab = dyn_get_symtab(dynamic, base);
     if (symtab == NULL) {
         ERROR(elf, "ELF has no symbol table\n");
@@ -180,6 +184,12 @@ char * dyn_get_strtab(Elf64_Dyn * dyn, char * base) {
     Elf64_Dyn * ent = dyn_get_ent(dyn, DT_STRTAB);
     if (ent == NULL) return NULL;
     return base + ent->d_un.d_ptr;
+}
+
+char * dyn_get_soname(Elf64_Dyn * dyn, char * strtab) {
+    Elf64_Dyn * ent = dyn_get_ent(dyn, DT_SONAME);
+    if (ent == NULL) return NULL;
+    return &strtab[ent->d_un.d_val];
 }
 
 Elf64_Rela * dyn_get_rela(Elf64_Dyn * dyn, char * base) {

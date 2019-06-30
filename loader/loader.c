@@ -248,7 +248,19 @@ static dso_t * self = NULL;
 dso_t * dso_load_self() {
     if (self != NULL) return self;
 
-    char * path = strdup("loader.so");
+    if (!dyn_verify_dynamic(_DYNAMIC, __loader_base)) {
+        ERROR(load, "loader is missing information needed for dynamic loading\n");
+        goto fail;
+    }
+
+    char * strtab = dyn_get_strtab(_DYNAMIC, __loader_base);
+    char * soname = dyn_get_soname(_DYNAMIC, strtab);
+    if (soname == NULL) {
+        ERROR(load, "loader is missing an SONAME\n");
+        goto fail;
+    }
+
+    char * path = strdup(soname);
     if (path == NULL) return NULL;
 
     dso_t * dso = (dso_t *)ld_malloc(sizeof (dso_t));
@@ -275,6 +287,7 @@ dso_t * dso_load_self() {
 
 path_fail:
     ld_free(path);
+fail:
     return NULL;
 }
 
