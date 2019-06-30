@@ -11,6 +11,7 @@ extern Elf64_Dyn _DYNAMIC[];
 __attribute__((naked, noreturn))
 void _start() {
     asm(
+        "endbr64\n\t"
         "xor %%rbp, %%rbp\n\t"
         "mov %%rsp, %%rdi\n\t"
         "andq $-16, %%rsp\n\t"
