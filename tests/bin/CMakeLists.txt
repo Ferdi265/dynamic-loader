@@ -9,4 +9,4 @@ add_executable(helloinit helloinit.c)
 target_link_libraries(helloinit PRIVATE string init)
 
 add_executable(hellodyn hellodyn.c)
-target_link_libraries(helloinit PRIVATE string loader)
+target_link_libraries(hellodyn PRIVATE string loader)

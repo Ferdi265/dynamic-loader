@@ -6,6 +6,7 @@ add_executable(loader ${loader_sources})
 set_target_properties(loader PROPERTIES PREFIX lib SUFFIX .so)
 set_target_properties(loader PROPERTIES ENABLE_EXPORTS ON)
 target_link_options(loader PRIVATE -static-pie -Wl,--dynamic-list=${CMAKE_CURRENT_SOURCE_DIR}/dynamic-list.txt)
+target_link_libraries(loader INTERFACE $<TARGET_FILE:loader>)
 target_include_directories(loader PUBLIC include)
 set(LOADER_OBJECT_PATH ${CMAKE_CURRENT_BINARY_DIR}/libloader.so PARENT_SCOPE)
 
