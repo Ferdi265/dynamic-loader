@@ -4,11 +4,12 @@
 #include <unistd.h>
 
 #include "debug.h"
+#include "basepath.h"
 #include "libpath.h"
 #include "ld_malloc.h"
 
 static char * base_paths[] = {
-    "/home/yrlf/Programming/c/cmake-loader/build/tests/shared"
+    BASE_LIBRARY_PATH
 };
 
 libpath_context_t base_search_path = {
