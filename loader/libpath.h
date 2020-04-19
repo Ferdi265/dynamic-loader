@@ -21,6 +21,7 @@ typedef struct {
 } libpath_context_t;
 
 extern libpath_context_t base_search_path;
+extern libpath_t preload_list;
 
 bool parse_libpath(char * path, libpath_t * libpath);
 void free_libpath(libpath_t * libpath);

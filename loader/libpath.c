@@ -27,6 +27,7 @@ libpath_context_t base_search_path = {
 
 libpath_list_t base_rpath;
 libpath_list_t base_runpath;
+libpath_t preload_list;
 
 bool parse_libpath(char * path, libpath_t * libpath) {
     DEBUG(libpath, "Parsing libpath '%s'\n", path);
@@ -98,6 +99,12 @@ void load_libpath() {
         DEBUG(libpath, "Parsing LD_RUNPATH\n");
         base_search_path.runpath = &base_runpath;
         parse_libpath(env_runpath, &base_runpath.element);
+    }
+
+    char * env_preload = getenv("LD_PRELOAD");
+    if (env_preload != NULL) {
+        DEBUG(libpath, "Parsing LD_PRELOAD\n");
+        parse_libpath(env_preload, &preload_list);
     }
 }
 

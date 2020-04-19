@@ -47,6 +47,11 @@ int main(int argc, char ** argv, char ** envp) {
 
         name = argv[0];
         dso = dso_load_initial(name, phdr, phdr_length, entry);
+
+        for (size_t i = 0; i < preload_list.length; i++) {
+            dso_dynload(preload_list.paths[i], false, &base_search_path);
+        }
+
         if (!dso_dynlink(dso, true, &base_search_path)) {
             dso = NULL;
         }
@@ -55,6 +60,10 @@ int main(int argc, char ** argv, char ** envp) {
             ERROR(main, "Invalid number of parameters\n");
             ERROR(main, "Usage: %s <elf_file> [args...]\n", argc > 0 ? argv[0] : "loader");
             exit(1);
+        }
+
+        for (size_t i = 0; i < preload_list.length; i++) {
+            dso_dynload(preload_list.paths[i], false, &base_search_path);
         }
 
         name = argv[1];
