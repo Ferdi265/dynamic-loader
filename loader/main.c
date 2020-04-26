@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 #include <elf.h>
 
 #include "crt.h"
@@ -35,6 +36,12 @@ int main(int argc, char ** argv, char ** envp) {
         }
 
         name = argv[1];
+    }
+
+    name = strdup(name);
+    if (name == NULL) {
+        ERROR(main, "Failed to allocate space for executable name\n");
+        exit(1);
     }
 
     for (size_t i = 0; i < preload_list.length; i++) {
