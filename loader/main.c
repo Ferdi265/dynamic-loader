@@ -38,7 +38,7 @@ int main(int argc, char ** argv, char ** envp) {
     }
 
     for (size_t i = 0; i < preload_list.length; i++) {
-        dso_dynload(preload_list.paths[i], false, &base_search_path);
+        dso_resolve_dynload(preload_list.paths[i], false, &base_search_path);
     }
 
     dso_t * dso = NULL;
