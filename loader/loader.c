@@ -152,25 +152,21 @@ dso_t * dso_load(char * path) {
     size_t phdr_length = info.header->e_phnum;
     if (!elf_verify_header(info.header)) goto close_fail;
 
-    char * base;
-    if (!map_load_segments(&info, &base)) goto close_fail;
-
     Elf64_Phdr * copy = copy_phdrs(phdr, phdr_length);
     if (copy == NULL) goto close_fail;
 
+    char * base;
+    if (!map_load_segments(&info, &base)) goto free_fail;
+
     if (!elf_verify_dynamic(phdr, phdr_length, base)) {
         ERROR(load, "ELF is missing information needed for dynamic loading\n");
-        close_elf(&info);
-        unmap_load_segments(base, copy, phdr_length);
-        ld_free(copy);
-        return NULL;
+        goto unmap_fail;
     }
 
     dso_t * dso = (dso_t *)ld_malloc(sizeof (dso_t));
     if (dso == NULL) {
         ERROR(load, "Failed to allocate dso handle\n");
-        ld_free(copy);
-        goto close_fail;
+        goto unmap_fail;
     }
 
     dso->path = path;
@@ -190,6 +186,11 @@ dso_t * dso_load(char * path) {
     dso_ref(dso);
     return dso;
 
+
+unmap_fail:
+    unmap_load_segments(base, copy, phdr_length);
+free_fail:
+    ld_free(copy);
 close_fail:
     close_elf(&info);
     return NULL;
