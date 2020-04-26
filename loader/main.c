@@ -89,6 +89,14 @@ int main(int argc, char ** argv, char ** envp) {
         DEBUG(main, "LD_NOEXEC is set, not executing\n");
 
         dso_unref(dso);
+
+        for (size_t i = 0; i < preload_list.length; i++) {
+            dso_t * lib = dso_find(preload_list.paths[i]);
+            if (lib != NULL) {
+                dso_unref(lib);
+            }
+        }
+
         dso_unload_self();
         unload_libpath();
 
