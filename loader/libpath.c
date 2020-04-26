@@ -112,6 +112,7 @@ void unload_libpath() {
     free_libpath(&base_search_path.envpath);
     free_libpath(&base_rpath.element);
     free_libpath(&base_runpath.element);
+    free_libpath(&preload_list);
 }
 
 char * libpath_context_resolve(char * name, libpath_context_t * context) {
