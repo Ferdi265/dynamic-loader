@@ -24,8 +24,24 @@ int main(int argc, char ** argv, char ** envp) {
         exit(1);
     }
 
-    dso_t * dso = NULL;
     char * name = NULL;
+    if (__is_loader) {
+        name = argv[0];
+    } else {
+        if (argc < 2) {
+            ERROR(main, "Invalid number of parameters\n");
+            ERROR(main, "Usage: %s <elf_file> [args...]\n", argc > 0 ? argv[0] : "loader");
+            exit(1);
+        }
+
+        name = argv[1];
+    }
+
+    for (size_t i = 0; i < preload_list.length; i++) {
+        dso_dynload(preload_list.paths[i], false, &base_search_path);
+    }
+
+    dso_t * dso = NULL;
     if (__is_loader) {
         Elf64_Phdr * phdr = NULL;
         size_t phdr_length = 0;
@@ -45,28 +61,11 @@ int main(int argc, char ** argv, char ** envp) {
             }
         }
 
-        name = argv[0];
         dso = dso_load_initial(name, phdr, phdr_length, entry);
-
-        for (size_t i = 0; i < preload_list.length; i++) {
-            dso_dynload(preload_list.paths[i], false, &base_search_path);
-        }
-
         if (!dso_dynlink(dso, true, &base_search_path)) {
             dso = NULL;
         }
     } else {
-        if (argc < 2) {
-            ERROR(main, "Invalid number of parameters\n");
-            ERROR(main, "Usage: %s <elf_file> [args...]\n", argc > 0 ? argv[0] : "loader");
-            exit(1);
-        }
-
-        for (size_t i = 0; i < preload_list.length; i++) {
-            dso_dynload(preload_list.paths[i], false, &base_search_path);
-        }
-
-        name = argv[1];
         dso = dso_dynload(name, true, &base_search_path);
 
         *(size_t *)argv = argc - 1;
