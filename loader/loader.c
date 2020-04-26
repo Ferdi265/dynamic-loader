@@ -277,7 +277,7 @@ dso_t * dso_load_self() {
     dso->dyn = _DYNAMIC;
     dso->entry = NULL;
     dso->unloadable = false;
-    dso->initialized = true;
+    dso->initialized = false;
     dso->refcount = 0;
     dso->deps = (dso_deps_t){ .elements = NULL, .length = 0 };
     dso->next = NULL;
