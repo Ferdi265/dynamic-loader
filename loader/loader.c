@@ -197,34 +197,32 @@ close_fail:
 }
 
 dso_t * dso_load_initial(char * name, Elf64_Phdr * phdr, size_t phdr_length, void * entry) {
-    char * path = strdup(name);
-    if (path == NULL) return NULL;
 
     dso_t * dso = (dso_t *)ld_malloc(sizeof (dso_t));
     if (dso == NULL) {
         ERROR(load, "Failed to allocate dso handle\n");
-        goto path_fail;
+        return NULL;
     }
 
     Elf64_Phdr * phdr_ent = phdr_get_ent(phdr, phdr_length, PT_PHDR);
     if (phdr_ent == NULL) {
         ERROR(load, "Failed to get binary base (no PT_PHDR entry present)\n");
-        goto path_fail;
+        return NULL;
     }
     dso->base = (char *)phdr - phdr_ent->p_vaddr;
 
     if (!elf_verify_dynamic(phdr, phdr_length, dso->base)) {
         ERROR(load, "ELF is missing information needed for dynamic loading\n");
-        goto path_fail;
+        return NULL;
     }
 
     Elf64_Phdr * copy = copy_phdrs(phdr, phdr_length);
     if (copy == NULL) {
         ERROR(load, "Failed to allocate phdr copy\n");
-        goto path_fail;
+        return NULL;
     }
 
-    dso->path = path;
+    dso->path = name;
     dso->phdr = copy;
     dso->phdr_length = phdr_length;
     dso->dyn = phdr_get_dyn(copy, phdr_length, dso->base);
@@ -238,10 +236,6 @@ dso_t * dso_load_initial(char * name, Elf64_Phdr * phdr, size_t phdr_length, voi
 
     dso_ref(dso);
     return dso;
-
-path_fail:
-    ld_free(path);
-    return NULL;
 }
 
 extern Elf64_Dyn _DYNAMIC[];
