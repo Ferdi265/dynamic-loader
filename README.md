@@ -19,7 +19,7 @@ be loaded with:
 
 ## Dependencies
 
-- `libmusl.a` and `musl-gcc` (arch: `musl`, debian: `musl` and `musl-tools`)
+- `libmusl.a` and `musl-gcc` (arch: `musl`, debian: `musl musl-tools`)
 - `elf.h` (arch: part of `base`, debian: `libelf-dev`)
 
 ## Building
