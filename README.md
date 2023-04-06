@@ -14,8 +14,8 @@ A simple dynamic library loader for Linux capable of loading simple binaries usi
 
 \* glibc and musl provide their own dynamic library loader that they expect to
 be loaded with:
-- `ld-linux-x86_64.so.2` (aka ld.so) for glibc
-- `ld-musl-x86_64.so.1` (a symlink to musls libc.so) for musl
+- `ld-linux-x86_64.so.2` (aka `ld.so`) for glibc
+- `ld-musl-x86_64.so.1` (a symlink to musl's `libc.so`) for musl
 
 ## Dependencies
 
