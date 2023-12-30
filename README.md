@@ -28,3 +28,12 @@ be loaded with:
 - `cd build`
 - `make`
 - run `build/loader/libloader.so` or any of the binaries in `build/tests/bin/`
+
+## Resources
+
+This loader was written mostly by using specifications from [refspecs.linuxbase.org](https://refspecs.linuxbase.org/), mainly:
+
+- the [ELF spec](https://refspecs.linuxfoundation.org/elf/elf.pdf)
+- the [x86\_64 processor supplement](https://refspecs.linuxfoundation.org/elf/x86_64-abi-0.95.pdf)
+
+For some parts of the early loader startup code (mainly the code in `crt/`), I also read the source code of [musl libc](musl-libc.org/) to get a better understanding of typical ways to handle early loader init. To understand ELF symbol hash tables, I used multiple sources, but [this blog post on flagpenguin.me](https://flapenguin.me/elf-dt-hash) was most useful.
