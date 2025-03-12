@@ -42,3 +42,9 @@ understanding of typical ways to handle early loader init. To understand ELF
 symbol hash tables, I used multiple sources, but
 [this blog post on flagpenguin.me](https://flapenguin.me/elf-dt-hash) was most
 useful.
+
+## License
+
+This project is licensed under the MIT License (SPDX
+[MIT](https://spdx.org/licenses/MIT.html)). The full
+license text can also be found in the [LICENSE](/LICENSE) file.
