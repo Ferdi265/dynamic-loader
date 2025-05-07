@@ -2,6 +2,7 @@
 #include "string.h"
 
 typedef void voidfn_t();
+typedef void putsfn_t(const char *);
 
 int main() {
     puts("Hello!");
@@ -24,7 +25,7 @@ int main() {
     }
 
     puts("getting puts function pointer...");
-    voidfn_t * puts_fn = dlsym(NULL, "puts");
+    putsfn_t * puts_fn = dlsym(NULL, "puts");
     if (puts_fn != NULL) {
         puts_fn("Dynamic puts :O");
     }
