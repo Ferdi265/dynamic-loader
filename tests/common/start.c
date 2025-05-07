@@ -2,7 +2,7 @@
 #include "crt.h"
 
 __attribute__((noreturn))
-int __libc_start_main(mainfn * main, int argc, char ** argv, voidfn * init, voidfn * fini, void (*rtld_fini)(void), void * stack_end) {
+int __libc_start_main(mainfn * main, int argc, char ** argv, voidfn * init, voidfn * fini, [[maybe_unused]] void (*rtld_fini)(void), [[maybe_unused]] void * stack_end) {
     char ** envp = &argv[argc + 1];
 
     init();
