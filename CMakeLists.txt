@@ -4,6 +4,8 @@ set(CMAKE_COLOR_DIAGNOSTICS ON)
 set(CMAKE_SKIP_BUILD_RPATH ON)
 
 set(CMAKE_C_COMPILER musl-gcc)
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_EXTENSIONS ON)
 
 project(dynamic_loader C)
 
