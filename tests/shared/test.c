@@ -1,11 +1,11 @@
 #include "string.h"
 
-__attribute__((constructor))
+[[gnu::constructor]]
 void init() {
     puts("[libtest.so] Loaded");
 }
 
-__attribute__((destructor))
+[[gnu::destructor]]
 void fini() {
     puts("[libtest.so] Unloaded");
 }

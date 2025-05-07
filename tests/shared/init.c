@@ -1,11 +1,11 @@
 #include <string.h>
 
-__attribute__((constructor))
+[[gnu::constructor]]
 void init() {
     puts("I'm an initializer");
 }
 
-__attribute__((constructor))
+[[gnu::constructor]]
 void init2() {
     puts("I'm a second initializer");
 }

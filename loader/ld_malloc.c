@@ -479,22 +479,22 @@ void * ld_calloc(size_t nmemb, size_t size) {
     return ptr;
 }
 
-__attribute__((visibility("hidden")))
+[[gnu::visibility("hidden")]]
 void * malloc(size_t size) {
     return ld_malloc(size);
 }
 
-__attribute__((visibility("hidden")))
+[[gnu::visibility("hidden")]]
 void free(void * ptr) {
     ld_free(ptr);
 }
 
-__attribute__((visibility("hidden")))
+[[gnu::visibility("hidden")]]
 void * realloc(void * ptr, size_t size) {
     return ld_realloc(ptr, size);
 }
 
-__attribute__((visibility("hidden")))
+[[gnu::visibility("hidden")]]
 void * calloc(size_t nmemb, size_t size) {
     return ld_calloc(nmemb, size);
 }

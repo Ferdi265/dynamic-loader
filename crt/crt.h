@@ -7,7 +7,7 @@ typedef void voidfn();
 typedef int mainfn(int, char **, char **);
 
 int main(int argc, char ** argv, char ** envp);
-__attribute__((noreturn))
+[[noreturn]]
 int __libc_start_main(mainfn * main, int argc, char ** argv, voidfn * init, voidfn * fini, void (*rtld_fini)(void), void * stack_end);
 void _init();
 void _fini();

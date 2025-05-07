@@ -1,7 +1,7 @@
 #include "syscall.h"
 #include "crt.h"
 
-__attribute__((noreturn))
+[[noreturn]]
 int __libc_start_main(mainfn * main, int argc, char ** argv, voidfn * init, voidfn * fini, [[maybe_unused]] void (*rtld_fini)(void), [[maybe_unused]] void * stack_end) {
     char ** envp = &argv[argc + 1];
 

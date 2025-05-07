@@ -1,6 +1,6 @@
 #include "crt.h"
 
-__attribute__((naked, noreturn))
+[[gnu::naked, noreturn]]
 void _start() {
     asm(
         "endbr64\n\t"
@@ -12,7 +12,7 @@ void _start() {
     );
 }
 
-__attribute__((noreturn))
+[[noreturn]]
 void _start_c(size_t * sp) {
     int argc = *sp;
     char ** argv = (char **)(sp + 1);
