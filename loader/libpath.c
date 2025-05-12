@@ -6,7 +6,6 @@
 #include "debug.h"
 #include "basepath.h"
 #include "libpath.h"
-#include "ld_malloc.h"
 
 static char * base_paths[] = {
     BASE_LIBRARY_PATH
@@ -42,7 +41,7 @@ bool parse_libpath(char * path, libpath_t * libpath) {
         }
 
         size_t length = next - cur;
-        char * new_path = (char *)ld_malloc(length + 1);
+        char * new_path = (char *)malloc(length + 1);
         if (new_path == NULL) {
             ERROR(libpath, "Failed to allocate buffer for path name\n");
 
@@ -52,11 +51,11 @@ bool parse_libpath(char * path, libpath_t * libpath) {
         strncpy(new_path, cur, length);
         new_path[length] = '\0';
 
-        char ** new_paths = (char **)ld_realloc(libpath->paths, (libpath->length + 1) * sizeof (char *));
+        char ** new_paths = (char **)realloc(libpath->paths, (libpath->length + 1) * sizeof (char *));
         if (new_paths == NULL) {
             ERROR(libpath, "Failed to resize library path pointer array\n");
 
-            ld_free(new_path);
+            free(new_path);
             free_libpath(libpath);
             return false;
         }
@@ -73,9 +72,9 @@ bool parse_libpath(char * path, libpath_t * libpath) {
 
 void free_libpath(libpath_t * libpath) {
     for (size_t i = 0; i < libpath->length; i++) {
-        ld_free(libpath->paths[i]);
+        free(libpath->paths[i]);
     }
-    ld_free(libpath->paths);
+    free(libpath->paths);
     libpath->paths = NULL;
     libpath->length = 0;
 }
@@ -170,9 +169,9 @@ char * libpath_resolve(char * name, libpath_t * libpath) {
     for (size_t i = 0; i < libpath->length; i++) {
         size_t new_path_len = name_len + 1 + strlen(libpath->paths[i]) + 1;
         if (new_path_len > path_len) {
-            char * new_path = (char *)ld_realloc(path, new_path_len);
+            char * new_path = (char *)realloc(path, new_path_len);
             if (new_path == NULL) {
-                ld_free(path);
+                free(path);
                 ERROR(libpath, "Failed to grow path buffer\n");
                 return NULL;
             } else {
@@ -185,16 +184,16 @@ char * libpath_resolve(char * name, libpath_t * libpath) {
         strcat(path, name);
 
         if (access(path, R_OK) == 0) {
-            char * new_path = (char *)ld_realloc(path, strlen(path) + 1);
+            char * new_path = (char *)realloc(path, strlen(path) + 1);
             if (new_path == NULL) {
                 ERROR(libpath, "Failed to shrink path buffer\n");
-                ld_free(path);
+                free(path);
                 return NULL;
             }
             return new_path;
         }
     }
 
-    ld_free(path);
+    free(path);
     return NULL;
 }

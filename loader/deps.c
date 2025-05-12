@@ -1,7 +1,7 @@
+#include <stdlib.h>
 #include "deps.h"
 #include "dynlink.h"
 #include "elf.h"
-#include "ld_malloc.h"
 #include "debug.h"
 
 bool dso_load_deps(dso_t * dso, libpath_context_t * context) {
@@ -32,7 +32,7 @@ bool dso_load_deps(dso_t * dso, libpath_context_t * context) {
 
     for (size_t i = 0; dso->dyn[i].d_tag != DT_NULL; i++) {
         if (dso->dyn[i].d_tag == DT_NEEDED) {
-            dso_t ** new_deps_list = ld_realloc(dso->deps.elements, (dso->deps.length + 1) * sizeof (dso_t *));
+            dso_t ** new_deps_list = realloc(dso->deps.elements, (dso->deps.length + 1) * sizeof (dso_t *));
             if (new_deps_list == NULL) {
                 ERROR(deps, "Failed to grow dependency list\n");
 
@@ -69,7 +69,7 @@ void dso_unload_deps(dso_t * dso) {
     for (size_t i = 0; i < dso->deps.length; i++) {
         dso_unref(dso->deps.elements[i]);
     }
-    ld_free(dso->deps.elements);
+    free(dso->deps.elements);
     dso->deps.elements = NULL;
     dso->deps.length = 0;
 }

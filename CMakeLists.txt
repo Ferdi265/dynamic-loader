@@ -9,6 +9,9 @@ set(CMAKE_C_EXTENSIONS ON)
 
 project(dynamic_loader C)
 
+option(WITH_CUSTOM_ALLOCATOR "use the custom mmap-only malloc implementation" ON)
+
 add_subdirectory(crt)
+add_subdirectory(alloc)
 add_subdirectory(loader)
 add_subdirectory(tests)

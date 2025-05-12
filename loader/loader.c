@@ -14,7 +14,6 @@
 #include "elf.h"
 #include "dso.h"
 #include "debug.h"
-#include "ld_malloc.h"
 
 #define PAGE_SIZE 0x1000
 #define FLOOR2(v, n) ((v) & ~((n) - 1))
@@ -134,7 +133,7 @@ fail:
 }
 
 static Elf64_Phdr * copy_phdrs(Elf64_Phdr * phdr, size_t phdr_length) {
-    Elf64_Phdr * copy = (Elf64_Phdr *)ld_malloc(phdr_length * sizeof (Elf64_Phdr));
+    Elf64_Phdr * copy = (Elf64_Phdr *)malloc(phdr_length * sizeof (Elf64_Phdr));
     if (copy == NULL) {
         ERROR(load, "Failed to allocate space for program header copy\n");
         return NULL;
@@ -163,7 +162,7 @@ dso_t * dso_load(char * path) {
         goto unmap_fail;
     }
 
-    dso_t * dso = (dso_t *)ld_malloc(sizeof (dso_t));
+    dso_t * dso = (dso_t *)malloc(sizeof (dso_t));
     if (dso == NULL) {
         ERROR(load, "Failed to allocate dso handle\n");
         goto unmap_fail;
@@ -190,7 +189,7 @@ dso_t * dso_load(char * path) {
 unmap_fail:
     unmap_load_segments(base, copy, phdr_length);
 free_fail:
-    ld_free(copy);
+    free(copy);
 close_fail:
     close_elf(&info);
     return NULL;
@@ -198,7 +197,7 @@ close_fail:
 
 dso_t * dso_load_initial(char * name, Elf64_Phdr * phdr, size_t phdr_length, void * entry) {
 
-    dso_t * dso = (dso_t *)ld_malloc(sizeof (dso_t));
+    dso_t * dso = (dso_t *)malloc(sizeof (dso_t));
     if (dso == NULL) {
         ERROR(load, "Failed to allocate dso handle\n");
         return NULL;
@@ -258,7 +257,7 @@ dso_t * dso_load_self() {
     char * path = strdup(soname);
     if (path == NULL) return NULL;
 
-    dso_t * dso = (dso_t *)ld_malloc(sizeof (dso_t));
+    dso_t * dso = (dso_t *)malloc(sizeof (dso_t));
     if (dso == NULL) {
         ERROR(load, "Failed to allocate dso handle\n");
         goto path_fail;
@@ -281,7 +280,7 @@ dso_t * dso_load_self() {
     return self = dso;
 
 path_fail:
-    ld_free(path);
+    free(path);
 fail:
     return NULL;
 }
@@ -292,10 +291,10 @@ bool dso_unload(dso_t * dso) {
         res = unmap_load_segments(dso->base, dso->phdr, dso->phdr_length);
     }
 
-    ld_free(dso->deps.elements);
-    ld_free(dso->phdr);
-    ld_free(dso->path);
-    ld_free(dso);
+    free(dso->deps.elements);
+    free(dso->phdr);
+    free(dso->path);
+    free(dso);
     return res;
 }
 

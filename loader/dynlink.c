@@ -1,9 +1,9 @@
+#include <stdlib.h>
 #include "dynlink.h"
 #include "loader.h"
 #include "deps.h"
 #include "reloc.h"
 #include "init.h"
-#include "ld_malloc.h"
 #include "debug.h"
 
 dso_t * dso_resolve_dynload(char * name, bool exec, libpath_context_t * context) {
@@ -26,7 +26,7 @@ dso_t * dso_dynload(char * path, bool exec, libpath_context_t * context) {
     dso_t * dso = dso_load(path);
     if (dso == NULL) {
         ERROR(dynlink, "Failed to load '%s'\n", path);
-        ld_free(path);
+        free(path);
         return NULL;
     }
 
