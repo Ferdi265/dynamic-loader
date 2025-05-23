@@ -95,15 +95,24 @@ static bool map_load_segments(elf_file_t * info, char ** out_base) {
             size_t offset_page = FLOOR2(cur->p_offset, PAGE_SIZE);
             size_t align_diff = cur->p_vaddr - vaddr_page;
 
-            size_t filesz_page = CEIL2(align_diff + cur->p_filesz, PAGE_SIZE);
+            size_t real_filesz = align_diff + cur->p_filesz;
+            size_t filesz_page = CEIL2(real_filesz, PAGE_SIZE);
             size_t memsz_page = CEIL2(align_diff + cur->p_memsz, PAGE_SIZE);
 
-            int mmap_prot = (align_diff > 0 ? PROT_READ | PROT_WRITE : prot);
+            int mmap_prot = ((align_diff > 0)|(real_filesz < filesz_page) ? PROT_READ | PROT_WRITE : prot);
 
             char * map = (char *)mmap(base + vaddr_page, filesz_page, mmap_prot, MAP_FIXED | MAP_PRIVATE, info->fd, offset_page);
             if (map == MAP_FAILED) {
                 ERROR(load, "Failed to map program header %d (mapped from file)\n", i);
                 goto fail;
+            }
+
+            if(real_filesz < filesz_page){
+                memset(map+real_filesz, 0, filesz_page-real_filesz);
+                if (prot != mmap_prot && mprotect(map, filesz_page, prot) == -1){
+                    ERROR(load, "Failed to reprotect program header %d (mapped from file)\n", i);
+                    goto fail;
+                }
             }
 
             if (align_diff > 0) {
